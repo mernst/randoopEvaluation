@@ -23,10 +23,14 @@ Clone this repository on your system. We recommend you make a fresh directory to
 mkdir <myNewDirectory>
 cd <myNewDirectory>
 git clone https://github.com/jkotalik/randoopEvaluation.git
-cd randoopEvaluation
 ```
 
+
 ### Running the evaluation script
+
+Enter your clone of this repository:
+
+```cd randoopEvaluation```
 
 Next, run the evaluation script with your desired configuration (explained in more detail below). This script runs the test generation tools with varying time limits across Defects4J projects. Here is an example configuration that will allow partial replication of the data for the "Time" project in Defects4j, using all 4 configurations of Randoop/DigDog:
 
