@@ -1,52 +1,69 @@
 ## DigDog
 
 ### Getting Started
-Welcome to the DigDog Repository! We'll assume you're running on a linux environment. To get started, clone this repository on your system. We recommend you make a fresh directory to clone this into, since our evaluation framework will be downloading some other repositories alongside it, and interacting with those:
+Welcome to the DigDog Repository! We'll assume you're running on a Linux environment.
 
-`mkdir <myNewDirectory>`
+You need the Python libraries matplotlib, numpy, and python-tk.  To install them on Ubuntu:
+```
+pip install matplotlib
+pip install numpy
+apt-get install python-tk
+```
 
-`cd <myNewDirectory>`
+To install them on Fedora:
+```
+pip install matplotlib
+pip install numpy
+yum install python-tk
+```
 
-`git clone https://github.com/jkotalik/randoopEvaluation.git`
+Clone this repository on your system. We recommend you make a fresh directory to clone this into, since our evaluation framework will be downloading some other repositories alongside it, and interacting with those:
 
-Then, step into the newly cloned directory.
+```
+mkdir <myNewDirectory>
+cd <myNewDirectory>
+git clone https://github.com/jkotalik/randoopEvaluation.git
+cd randoopEvaluation
+```
 
-`cd randoopEvaluation`
+### Running the evaluation script
 
 Next, run the evaluation script with your desired configuration (explained in more detail below). This script runs the test generation tools with varying time limits across Defects4J projects. Here is an example configuration that will allow partial replication of the data for the "Time" project in Defects4j, using all 4 configurations of Randoop/DigDog:
 
-`./Evaluate.sh -i -b -o -t 50,200,350 -p Time`
+```./Evaluate.sh -i -b -o -t 50,200,350 -p Time```
 
 To execute the script, you may need to first run `chmod u+x ./Evaluate.sh`.
 
 This command will allow partial replication of results for the Time project. Please note that it will take a number of hours to run. To make it finish more quickly, you can specify fewer time limits or experiment conditions using the command line options. You can also run it in the background by instead running:
 
-`nohup ./Evaluate.sh -i -b -o -t 50,200,350 -p Time &>experiments/log &` (this will record its output in `experiments/log` so you can check up on the execution from time to time as it runs)
+```nohup ./Evaluate.sh -i -b -o -t 50,200,350 -p Time &>experiments/log &```
+
+(This will record its output in `experiments/log` so you can check up on the execution from time to time as it runs.)
 
 As the script runs, it will output coverage data in a line-separated format to the `experiments` directory. These data files can then be passed to the plotting script to produce graphs and csv files of the results. More information on the naming and formatting conventions of these intermediate data files can be found below.
 
 The data can then be used to generate graphs comparing the various tools:
 
-`cd experiments`
-
-`python Plot.py filename1.txt filename2.txt ... filenameN.txt`
+```
+cd experiments
+python Plot.py filename1.txt filename2.txt ... filenameN.txt
+```
 
 The graph will be saved in the `experiments/plots` directory, named `'Project' 'CoverageType' Coverage Percentage.png`.
 
 To summarize this opening example, performing the following set of commands (waiting a number of hours for the evaluation script to finish before invoking the next command) will replicate some results for the Time project's individual experiment:
-`./Evaluate.sh -i -b -o -t 50,200,350 -p Time`
 
-
-`python experiments/Plot.py experiments/Time_Individual_Randoop_Line.txt experiments/Time_Orienteering_Line.txt  experiments/Time_Individual_ConstantMining_Line.txt  experiments/Time_Individual_DigDog_Line.txt`
-
-
-`python experiments/Plot.py experiments/Time_Individual_Randoop_Branch.txt experiments/Time_Orienteering_Branch.txt  experiments/Time_Individual_ConstantMining_Branch.txt  experiments/Time_Individual_DigDog_Branch.txt`
+```
+./Evaluate.sh -i -b -o -t 50,200,350 -p Time
+python experiments/Plot.py experiments/Time_Individual_Randoop_Line.txt experiments/Time_Orienteering_Line.txt  experiments/Time_Individual_ConstantMining_Line.txt  experiments/Time_Individual_DigDog_Line.txt
+python experiments/Plot.py experiments/Time_Individual_Randoop_Branch.txt experiments/Time_Orienteering_Branch.txt  experiments/Time_Individual_ConstantMining_Branch.txt  experiments/Time_Individual_DigDog_Branch.txt
+```
 
 This yields the following data files and plots:
-`experiments/plots/Time Individual Branch Coverage Percentage.png`
-`experiments/plots/Time Individual Line Coverage Percentage.png` 
-`experiments/Time Individual Branch Coverage Percentage.csv`
-`experiments/Time Individual Line Coverage Percentage.csv`
+ * `experiments/plots/Time Individual Branch Coverage Percentage.png`
+ * `experiments/plots/Time Individual Line Coverage Percentage.png` 
+ * `experiments/Time Individual Branch Coverage Percentage.csv`
+ * `experiments/Time Individual Line Coverage Percentage.csv`
 
 Read on for a complete description of options and configurations for the Evaluation script.
 
@@ -110,9 +127,10 @@ The other primary use case of the Evaluate.sh script is to run the "complete/ben
 ### Plot Script
 To run the script and create graphs for the data generated by the evaluation script:
 
-`cd experiments`
-
-`python Plot.py filename1.txt. filename2.txt ... filenameN.txt`
+```
+cd experiments
+python Plot.py filename1.txt. filename2.txt ... filenameN.txt
+```
 
 By default, a boxplot graph will be generated comparing the various tools for which the data was passed in. This graph will be saved in the `experiments/plots/` directory, named `'Project' 'Experiment' 'CoverageType' Coverage Percentage.png`.
 
@@ -120,14 +138,13 @@ An additonal option `-l` can be supplied to generate a line plot instead.
 
 Percentage data used in plotting will also be output in the `experiments/csv/` directory, named `'Project' 'Experiment' 'CoverageType' Coverage Percentage.csv`.
 
-In order for the plots to be generated successfully you may need to install matplotlib, numpy, and python-tk for python, this can be done by calling `pip install matplotlib`, `pip install numpy`, and `apt-get install python-tk`(if on Ubuntu) or `yum install python-tk`(if on Fedora).
-
 ### Table Script
 To run the script and generate a csv of the averages of data generated by the plot script over various projects:
 
-`cd experiments`
-
-`python Table.py fileprefix1 fileprefix2 ... fileprefixN`
+```
+cd experiments
+python Table.py fileprefix1 fileprefix2 ... fileprefixN
+```
 
 Where filePrefix is the name of a csv file generated by Plot.py up to the `Experiment`, but not including the coverage type, as the generated average csv will include both line and branch coverage statistics. Ex: `csv/Math Individual`.
 
@@ -136,11 +153,11 @@ The resulting csv will be output to `csv/Average.csv`
 ## Randoop
 
 DigDog is an extension of Randoop, a unit test generator for Java.
-It automatically creates unit tests for your classes, in JUnit format.
+Randoop (and DigDog) automatically creates unit tests for your classes, in JUnit format.
 
 More about Randoop:
 
-* [Randoop homepage](https://randoop.github.io/randoop/).
+* [Randoop homepage](https://randoop.github.io/randoop/)
 * [Randoop manual](https://randoop.github.io/randoop/manual/index.html)
 * [Randoop release](https://github.com/randoop/randoop/releases/latest)
 * [Randoop developer's manual](https://randoop.github.io/randoop/manual/dev.html)
